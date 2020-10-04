@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "589011903184",
+    "firebase_url": "https://matrimonytest-3e52f.firebaseio.com",
+    "project_id": "matrimonytest-3e52f",
+    "storage_bucket": "matrimonytest-3e52f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:589011903184:android:c5528b26471d0f062b74d5",
+        "android_client_info": {
+          "package_name": "com.reactmatrimonytest"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "589011903184-2afhpl9nglqgr81odd2nsgq91uj3bhjg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDm3eS9yoqMpBwdHY3sXLjUu1H1-jKJUg0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "589011903184-2afhpl9nglqgr81odd2nsgq91uj3bhjg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
