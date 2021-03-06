@@ -21,8 +21,11 @@ import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import useTheme from "../../hooks/useTheme";
 import FooterNavigation from "../Footer/Index";
 import auth from "@react-native-firebase/auth";
-import RNUpiPayment from "react-native-upi-pay";
-
+import RNUpiPayment from "react-native-upi-payment";
+import { InterstitialAd, RewardedAd, BannerAd, TestIds, BannerAdSize, AdEventType, RewardedAdEventType  } from '@react-native-firebase/admob';
+const rewarded = RewardedAd.createForAdRequest('ca-app-pub-3671018146205481/7873621947', {
+  requestNonPersonalizedAdsOnly: true,
+});
 // @ts-ignore
 const ImagePath = require("../../images/profile.png");
 const girl = require("../../images/new-profile.jpg");
@@ -46,6 +49,16 @@ const Profile: React.FunctionComponent<Props> = ({ history }: Props) => {
   const [image, setImage] = useState(girlImageUri);
 
   useEffect(() => {
+    rewarded.onAdEvent((type, error, reward) => {
+      if (type === RewardedAdEventType.LOADED) {
+        rewarded.show();
+      }
+      if (type === RewardedAdEventType.EARNED_REWARD) {
+        console.log('User earned reward of ', reward);
+      }
+    });
+    
+    rewarded.load();
     if (auth().currentUser !== null) {
       console.log(
         "logged In User" +
@@ -273,6 +286,7 @@ const Profile: React.FunctionComponent<Props> = ({ history }: Props) => {
           </TouchableOpacity>
         </ScrollView>
         <FooterNavigation history={history} />
+        <BannerAd unitId={'ca-app-pub-3671018146205481/3923602798'} size={BannerAdSize.FULL_BANNER}/>
       </View>
     </>
   );

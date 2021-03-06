@@ -5543,10 +5543,10 @@ react-native-typing-animation@^0.1.7:
   resolved "https://registry.yarnpkg.com/react-native-typing-animation/-/react-native-typing-animation-0.1.7.tgz#8f2cf08d9400ae543a110292eb7d71523dda5528"
   integrity sha512-4H3rF9M+I2yAZpYJcY0Mb29TXkn98QK12rrKSY6LZj1BQD9NNmRZuNXzwX4XHapsIz+N/J8M3p27FOQPbfzqeg==
 
-react-native-upi-pay@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/react-native-upi-pay/-/react-native-upi-pay-1.0.8.tgz#cd74b8d4e97f69c474e605bf7c7224e94d6a2377"
-  integrity sha512-3QG5fFxcaZsXidugtkEP1lY/R+QdVX7B6cCcJuJoCuANL7JhEWQW7l8hfxo4Do0TBrmraKeKAg78/K6fI9bugQ==
+react-native-upi-payment@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/react-native-upi-payment/-/react-native-upi-payment-1.0.2.tgz#685972e9e28244c930e1cbaa7c799c993a1bcb05"
+  integrity sha512-IytUT08Xl0HYEtcjPU7n8RXjYWJYjT4uHpfbL6MEiC74jl06kh4bG9CqBNqt1HTfkA0OXxiPlgYUmaj99XIeMA==
 
 react-native-upi@^1.0.6:
   version "1.0.6"

@@ -12,7 +12,6 @@ import {
   ImageBackground,
   TouchableOpacity,
   ScrollView,
-  Text,
 } from "react-native";
 import { AppConstants, AppTheme } from "../../config/DefaultConfig";
 import ThemedText from "../../components/UI/ThemedText";

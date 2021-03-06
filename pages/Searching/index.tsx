@@ -12,7 +12,6 @@ import {
   FlatList,
   Text,
   TouchableOpacity,
-  Alert,
 } from "react-native";
 import { AppConstants, AppTheme } from "../../config/DefaultConfig";
 import ThemedText from "../../components/UI/ThemedText";
@@ -23,7 +22,7 @@ import database from "@react-native-firebase/database";
 import auth from "@react-native-firebase/auth";
 import RoundButton from "../../components/Base/RoundButton";
 import AddSubscriptionView from "../../components/AddSubscriptionView";
-import RNUpiPayment from "react-native-upi-pay";
+import RNUpiPayment from "react-native-upi-payment";
 
 const girlImageUri =
   "https://i.picsum.photos/id/1027/200/300.jpg?hmac=WCxdERZ7sgk4jhwpfIZT0M48pctaaDcidOi3dKSHJYY";
@@ -97,30 +96,12 @@ const Searching: React.FunctionComponent<Props> = ({ history }: Props) => {
   }, []);
 
   const message = (selected) => {
-    //  console.group("message", selected);
-    database()
-      .ref("user")
-      .child(auth().currentUser.uid)
-      .once("value")
-      .then((dataSnapshot) => {
-        if (dataSnapshot.val().premium == false) {
-          RNUpiPayment.initializePayment(
-            {
-              vpa: "9646407363@ybl", // or can be john@ybl or mobileNo@upi
-              payeeName: "John Doe",
-              amount: "101",
-              transactionRef: "aasf-332-aoei-fn",
-            },
-            successCallback,
-            failureCallback
-          );
-        } else {
-          history.push({
-            pathname: "/chat",
-            state: { detail: selected },
-          });
-        }
-      });
+    console.group("message", selected);
+
+    history.push({
+      pathname: "/chat",
+      state: { detail: selected },
+    });
   };
 
   const successCallback = (res) => {

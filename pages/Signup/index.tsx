@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { RouteComponentProps } from "react-router-native";
 import { Dispatch } from "redux";
 import {
@@ -15,7 +15,6 @@ import {
   Platform,
   PermissionsAndroid,
   Button,
-  TextInput,
 } from "react-native";
 import { AppConstants, AppTheme } from "../../config/DefaultConfig";
 import ThemedText from "../../components/UI/ThemedText";
@@ -33,7 +32,7 @@ import storage from "@react-native-firebase/storage";
 import RNFetchBlob from "react-native-fetch-blob";
 import auth from "@react-native-firebase/auth";
 import Spinner from "react-native-loading-spinner-overlay";
-
+import { InterstitialAd, RewardedAd, BannerAd, TestIds, BannerAdSize, AdEventType  } from '@react-native-firebase/admob';
 interface LoginField {
   username?: string;
   email?: string;
@@ -53,7 +52,19 @@ interface Props extends RouteComponentProps {
 }
 
 const girl = require("../../images/new-profile.jpg");
+const interstitial = InterstitialAd.createForAdRequest('ca-app-pub-3671018146205481/5043637990', {
+  requestNonPersonalizedAdsOnly: true,
+});
 const Signup: React.FunctionComponent<Props> = ({ history }: Props) => {
+  useEffect(() => {
+    interstitial.onAdEvent((type) => {
+      if (type === AdEventType.LOADED) {
+        interstitial.show();
+      }
+    });
+    
+    interstitial.load();
+  }, [])
   const constants: AppConstants = useConstants();
   const theme: AppTheme = useTheme();
   const [selected, setSelected] = useState<Boolean>(false);
@@ -117,7 +128,6 @@ const Signup: React.FunctionComponent<Props> = ({ history }: Props) => {
   const [confirmPass, onChangeConfirm] = useState<string>(password);
   const [errors, setErrors] = useState<ValidationError>({});
   const [image, setImage] = useState(girl);
-  const [about, onChangeAbout] = useState("");
   const [imageRef, setImageRef] = useState("");
   const [gender, setGender] = useState("male");
   const [color, setColor] = useState("#7f8c8d");
@@ -301,6 +311,8 @@ const Signup: React.FunctionComponent<Props> = ({ history }: Props) => {
 
   const profilePicApi = (image, props) => {};
   const goToHome = () => {
+    if(imageRef != "")
+    {
     setLoader(true);
     const errors: ValidationError = validate({
       username: username,
@@ -329,7 +341,6 @@ const Signup: React.FunctionComponent<Props> = ({ history }: Props) => {
                 id: res.user._user.uid,
                 premium: false,
                 age: age,
-                about: about,
               });
 
             database()
@@ -343,25 +354,25 @@ const Signup: React.FunctionComponent<Props> = ({ history }: Props) => {
                 id: res.user._user.uid,
                 premium: false,
                 age: age,
-                about: about,
               });
             setLoader(false);
             // history.push("/gender/");
             // this.props.navigation.navigate('Home')
           })
           .catch((error) => {
-            setLoader(false);
             Alert.alert(error.toString());
           });
       } catch (error) {
-        setLoader(false);
         Alert.alert(error.toString(error));
       }
       // history.push('/gender/')
     } else {
-      setLoader(false);
       setErrors(errors);
     }
+  }
+  else{
+    Alert.alert("Please upload image")
+  }
 
     // history.push('/gender/')
   };
@@ -376,7 +387,6 @@ const Signup: React.FunctionComponent<Props> = ({ history }: Props) => {
         cancelable={false}
         textStyle={{ color: "#FFF" }}
       />
-
       <View style={style.mainContainer}>
         <ScrollView>
           <ImageBackground source={ImagePath} style={style.imageStyle}>
@@ -469,19 +479,6 @@ const Signup: React.FunctionComponent<Props> = ({ history }: Props) => {
                 icon="user"
                 choose={false}
               />
-              <TextInput
-                placeholder="About Me"
-                textAlignVertical={"top"}
-                onChangeText={onChangeAbout}
-                style={{
-                  height: 70,
-                  borderWidth: 1,
-                  marginTop: 20,
-                  width: "100%",
-                }}
-                multiline={true}
-                maxLength={100}
-              />
               <ThemedText
                 styleKey="textColor"
                 style={{ alignSelf: "flex-start", margin: 10 }}
@@ -564,6 +561,7 @@ const Signup: React.FunctionComponent<Props> = ({ history }: Props) => {
           </View>
         </ScrollView>
       </View>
+      <BannerAd unitId={'ca-app-pub-3671018146205481/8982883008'} size={BannerAdSize.FULL_BANNER}/>
     </>
   );
 };

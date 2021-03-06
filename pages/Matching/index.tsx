@@ -23,8 +23,11 @@ import MaterialIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Swiper from "react-native-deck-swiper";
 import database from "@react-native-firebase/database";
 import auth from "@react-native-firebase/auth";
-import RNUpiPayment from "react-native-upi-pay";
-
+import RNUpiPayment from "react-native-upi-payment";
+import { InterstitialAd, RewardedAd, BannerAd, TestIds, BannerAdSize, AdEventType, RewardedAdEventType  } from '@react-native-firebase/admob';
+const interstitial = InterstitialAd.createForAdRequest('ca-app-pub-3671018146205481/6402975214', {
+  requestNonPersonalizedAdsOnly: true,
+});
 // @ts-ignore
 const ImagePath = require("../../images/dual-tone.png");
 const cross = require("../../images/cross.png");
@@ -77,12 +80,19 @@ const Matching: React.FunctionComponent<Props> = ({ history }: Props) => {
   };
 
   useEffect(() => {
+    interstitial.onAdEvent((type) => {
+      if (type === AdEventType.LOADED) {
+        interstitial.show();
+      }
+    });
+    
+    interstitial.load();
     database()
       .ref("user")
       .child(auth().currentUser.uid)
       .once("value")
       .then((dataSnapshot) => {
-        console.log("myyysnap", dataSnapshot.val());
+        console.group("snap", dataSnapshot.val());
         setUser(dataSnapshot.val());
         setImage(dataSnapshot.val().image);
         setName(dataSnapshot.val().name);
@@ -231,70 +241,45 @@ const Matching: React.FunctionComponent<Props> = ({ history }: Props) => {
                 <View style={style.card}>
                   <Image
                     source={{
-                      uri: card
-                        ? card.image !== image
-                          ? card.image
-                          : girlImageUri
-                        : girlImageUri,
+                      uri: image !== card.image ? card.image : girlImageUri,
                     }}
                     style={style.imageCard}
                   />
-
                   <ThemedText styleKey="cardTextColor" style={style.text}>
-                    {card
-                      ? card.username !== name
-                        ? card.username
-                        : null
-                      : null}
+                    {card ? card.username : null}
                   </ThemedText>
-                  <ThemedText styleKey="cardTextColor" style={style.text}>
-                    Age - {card ? card.age : ""}
-                  </ThemedText>
-                  <ThemedText styleKey="cardTextColor" style={style.text}>
-                    About - {card ? card.about : ""}
-                  </ThemedText>
+                  <View style={style.childContainer}>
+                    <TouchableOpacity>
+                      <TouchableOpacity
+                        style={style.cardContent}
+                        onPress={() => contact(card)}
+                      >
+                        <ThemedText
+                          styleKey="highlightTextColor"
+                          style={{ fontWeight: "bold", textAlign: "center" }}
+                        >
+                          View Contact
+                        </ThemedText>
+                      </TouchableOpacity>
+                    </TouchableOpacity>
 
-                  {card ? (
-                    card.username !== name ? (
-                      <>
-                        <View style={style.childContainer}>
-                          <TouchableOpacity style={{ marginTop: 15 }}>
-                            <TouchableOpacity
-                              style={style.cardContent}
-                              onPress={() => contact(card)}
-                            >
-                              <ThemedText
-                                styleKey="highlightTextColor"
-                                style={{
-                                  fontWeight: "bold",
-                                  textAlign: "center",
-                                }}
-                              >
-                                View Contact
-                              </ThemedText>
-                            </TouchableOpacity>
-                          </TouchableOpacity>
-
-                          <TouchableOpacity style={{ marginTop: 15 }}>
-                            <TouchableOpacity
-                              style={style.cardContent}
-                              onPress={() => connect(card)}
-                            >
-                              <ThemedText
-                                styleKey="highlightTextColor"
-                                style={{
-                                  fontWeight: "bold",
-                                  textAlign: "center",
-                                }}
-                              >
-                                Send Interest
-                              </ThemedText>
-                            </TouchableOpacity>
-                          </TouchableOpacity>
-                        </View>
-                      </>
-                    ) : null
-                  ) : null}
+                    <TouchableOpacity>
+                      <TouchableOpacity
+                        style={style.cardContent}
+                        onPress={() => connect(card)}
+                      >
+                        <ThemedText
+                          styleKey="highlightTextColor"
+                          style={{ fontWeight: "bold", textAlign: "center" }}
+                        >
+                          Send Interest
+                        </ThemedText>
+                      </TouchableOpacity>
+                    </TouchableOpacity>
+                  </View>
+                  <ThemedText styleKey="cardTextColor" style={style.text}>
+                    {"age"}
+                  </ThemedText>
                 </View>
               );
             }}
@@ -335,6 +320,7 @@ const Matching: React.FunctionComponent<Props> = ({ history }: Props) => {
         </ImageBackground>
       </ScrollView>
       <FooterNavigation history={history} />
+      <BannerAd unitId={'ca-app-pub-3671018146205481/6356719663'} size={BannerAdSize.FULL_BANNER}/>
     </View>
   );
 };
@@ -404,7 +390,7 @@ const style: Style = StyleSheet.create<Style>({
     paddingLeft: 25,
   },
   textStyle: {
-    fontSize: 10,
+    fontSize: 16,
     fontWeight: "bold",
   },
   backContainer: {
@@ -432,9 +418,9 @@ const style: Style = StyleSheet.create<Style>({
   },
   text: {
     textAlign: "center",
-    fontSize: 14,
+    fontSize: 32,
     fontWeight: "bold",
-    marginTop: 10,
+    marginTop: 20,
     backgroundColor: "transparent",
   },
   logoImage: {
@@ -492,7 +478,7 @@ const style: Style = StyleSheet.create<Style>({
     width: 107,
     height: 43,
     borderRadius: 20,
-    marginTop: 0,
+    marginTop: 5,
     paddingTop: Platform.OS === "ios" ? 3 : 1,
     marginLeft: 10,
   },

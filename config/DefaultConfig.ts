@@ -131,7 +131,7 @@ export const defaultConfig: ApplicationConfig = {
     selectedLanguage: LanguageKey.en,
     defaultTheme: "Dark Theme",
     defaultLanguage: "Default language",
-    title: "SHUBH VIVAH",
+    title: "HUM SAFAR",
     matching: "Matching",
     forgetText: "Forget Password",
     profileName: "@john manson",

@@ -13,7 +13,7 @@ import { AppTheme } from "../../config/DefaultConfig";
 import useTheme from "../../hooks/useTheme";
 import database from "@react-native-firebase/database";
 import auth from "@react-native-firebase/auth";
-import RNUpiPayment from "react-native-upi-pay";
+import RNUpiPayment from "react-native-upi-payment";
 
 // @ts-ignore
 const home = require("../../images/home.png");
@@ -59,7 +59,6 @@ const FooterNavigation: React.FunctionComponent<Props> = ({
             .child(auth().currentUser.uid)
             .once("value")
             .then((dataSnapshot) => {
-                console.log("ssss", dataSnapshot.val());
                 if (dataSnapshot.val().premium == false) {
                     RNUpiPayment.initializePayment(
                         {

@@ -23,10 +23,6 @@ import useTheme from "../../hooks/useTheme";
 import AddSubscriptionView from "../../components/AddSubscriptionView";
 import Spinner from "react-native-loading-spinner-overlay";
 import stripe from "react-native-stripe-payments";
-stripe.setOptions({
-  publishingKey:
-    "pk_live_51HPiJtEZUPKtMpfPvMgBv4h7XgL47WBUYKZ3khQpsx7qzrvHKICB5bX9po9XjvzVatmhXngyFxOIfhZctb7qeudC00sR1IViYd",
-});
 
 // @ts-ignore
 const ImagePath = require("../../images/profile.png");
@@ -118,12 +114,9 @@ const PaymentProcess: React.FunctionComponent<Props> = ({
         };
 
         stripe
-          .confirmPayment(
-            "sk_test_51HPiJtEZUPKtMpfPAKSZUL88SN1R5YZi1E9StWOEMUBX59xws46tdrsz3s4EijK2f7w3nlumQvaruCbVwQ4WB0a000kk9joxEg",
-            cardDetails
-          )
+          .confirmPayment(responseJson.id, cardDetails)
           .then((result) => {
-            console.log("res", result);
+            alert(JSON.stringify(result));
             //setLoader(false);
             // Alert.alert("Payment Done Successfully");
           })
@@ -149,7 +142,22 @@ const PaymentProcess: React.FunctionComponent<Props> = ({
     // Disable the Submit button after the request is sent
     setSubmitted(true);
     let creditCardToken;
-    makePayment(creditCardInput);
+
+    try {
+      makePayment(creditCardInput);
+      if (creditCardToken.error) {
+        // Reset the state if Stripe responds with an error
+        // Set submitted to false to let the user subscribe again
+        setSubmitted(false);
+        setError(STRIPE_ERROR);
+        return;
+      }
+    } catch (e) {
+      // Reset the state if the request was sent with an error
+      // Set submitted to false to let the user subscribe again
+      this.setState({ submitted: false, error: STRIPE_ERROR });
+      return;
+    }
   };
 
   return (
