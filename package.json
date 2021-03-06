@@ -21,6 +21,7 @@
     "@types/react-native-vector-icons": "^6.4.5",
     "@types/react-router-native": "^5.1.0",
     "@types/redux-actions": "^2.6.1",
+    "fcm-node": "^1.5.2",
     "g": "^2.0.1",
     "mem": "^6.0.1",
     "micro-validator": "0.0.5",
